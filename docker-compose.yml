@@ -1,0 +1,25 @@
+version: '3'
+services:
+  db:
+    image: postgres:11.5
+    volumes:
+      - ./db/pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    image: springboot_app
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"
+    environment:
+      spring.datasource.driverClassName: "org.postgresql.Driver"
+      spring.datasource.url: "jdbc:postgresql://db/bbs"
+      spring.datasource.username: "postgres"
+      spring.datasource.password: "postgres"
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
